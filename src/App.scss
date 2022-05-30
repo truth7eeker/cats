@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+ 
+}
+
+.cats-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  grid-template-rows: min-content;
+  justify-content: center;
+  grid-gap: 48px;
+  padding: 52px 62px;
+  @media (max-width: 890px) {
+    padding: 25px;
+    grid-gap: 15px;
+    place-items: center;
+  }
+}
