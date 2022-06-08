@@ -4,10 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-setupTests.ts
-reportWebVitals.ts
-react-app-env.d.ts
-App.test.tsx
+
 
 
 # testing

@@ -8,58 +8,40 @@ import heartHover from '../../assets/favorite_border.svg'
 
 function CatCard({cat}: {cat: ICat}): JSX.Element {
 
-  // copy each individual cat and add isHovered state
-  // change img src based off this state (from filled heart to border heart and vice-versa)
-  const [catObj, setCatObg] = useState({...cat, isBlockHovered: false, isHeartHovered: false})
-
-  // set hover to true
+  const [isBlockHovered, setIsBlockHovered] = useState(false)
+  const [isHeartHovered, setIsHeartHovered] = useState(false)
+ 
   const handleMouseEnter = (e: any) => {
-    // handle heart hover
+ 
     if (e.target.className === 'cat-card__like') {
-      setCatObg(prev => ({
-        ...prev,
-        isBlockHovered: true,
-        isHeartHovered: true
-      }))
+      setIsBlockHovered(true)
+      setIsHeartHovered(true)
     }
-    // handle block hover
-    setCatObg(prev => ({
-      ...prev,
-      isBlockHovered: true
-    }))
+      setIsBlockHovered(true)
   }
 
-  // set hover to false
   const handleMouseLeave = (e: any) => {
-    // handle heart hover
     if (e.target.className === 'cat-card__like') {
-      setCatObg(prev => ({
-        ...prev,
-        isHeartHovered: false
-      }))
+      setIsHeartHovered(false)
     } else {
-    // handle block hover
-    setCatObg(prev => ({
-      ...prev,
-      isBlockHovered: false
-    }))
+    setIsBlockHovered(false)
   }
   }
-
 
   return (
     <div className='cat-card'
          onMouseEnter={handleMouseEnter}
          onMouseLeave={handleMouseLeave}
       >
-          <div className={catObj.isBlockHovered ? 'cat-card__pic-wrapper' : '' }>
-                <img src={cat.url} className='cat-card__pic'/>
-                <img src={cat.favourite || catObj.isHeartHovered ? heart : catObj.isBlockHovered ? heartHover : ''} 
+          <div className={isBlockHovered ? 'cat-card__pic-wrapper' : '' }>
+                <img src={cat.url} className='cat-card__pic' alt='cat-pic' />
+                <img src={cat.favourite || isHeartHovered ? heart : isBlockHovered ? heartHover : ''} 
                     className='cat-card__like'
+                    alt=''
                     onClick={() => store.like(cat.id)} 
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
-                    style={{visibility: catObj.isBlockHovered ? 'visible' : 'hidden'}}
+                    style={{visibility: isBlockHovered ? 'visible' : 'hidden'}}
               />
           </div>
     </div>

@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx"
+import { makeAutoObservable,  runInAction } from "mobx"
 
 export interface ICat {
     id: string
@@ -6,15 +6,10 @@ export interface ICat {
     favourite?: boolean
 }
 
-const concatCatArrays = (oldData: Array<ICat>, newData: Array<ICat>) => {
-    return [...oldData, ...newData]
-}
-
-
 class Store {
     cats: Array<ICat>  = []
     page: number = 1
-    isLoading: boolean = true
+    isLoading: boolean = false
 
     constructor() {
         makeAutoObservable(this)
@@ -23,13 +18,24 @@ class Store {
     getCats() {
         fetch(`https://api.thecatapi.com/v1/images/search?limit=15&page=${this.page}`)
         .then(res => res.json())
-        .then(data => this.cats = concatCatArrays(this.cats, data))
-        this.isLoading = false
-        this.page = this.page + 1
+        .then(data => {
+          runInAction(() => this.cats = [...this.cats, ...data])
+          this.page = this.page + 1
+        })
+        .catch(err => {
+          console.error(err)
+        })
+        .finally(() => {
+          this.setLoadingCompleted()
+        })
     }
 
-    load() {
+    setLoadingStarted() {
         this.isLoading = true
+    }
+
+    setLoadingCompleted() {
+      this.isLoading = false
     }
 
     like(id: string) {
@@ -37,4 +43,4 @@ class Store {
     }
 }
 
-export const store = new Store
+export const store = new Store()

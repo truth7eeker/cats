@@ -7,7 +7,9 @@ export const handleScroll = (e: any) => {
     const scrollHeight= e.target.documentElement.scrollHeight
 
     if (height + scrollTop + 1 > scrollHeight) {
-        store.load()
+        store.setLoadingStarted()
     }
-
 }
+
+ 
+   

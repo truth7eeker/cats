@@ -1,36 +1,31 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { store } from  './store/store';
 import './App.scss';
 import Header from './components/header/Header';
-import Cats from './routes/Cats';
-import FavCats from './routes/FavCats';
-import { handleScroll } from './helpers/handleScroll';
+import useScroll from './hooks/useScroll';
+import CatsList from './components/cats-list/CatsList';
 
 
 function App() {
 
-  const isLoading = store.isLoading
+useScroll()
 
-  useEffect(() => {
-    isLoading && store.getCats()
-  }, [isLoading])
-  
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-      return () => {
-        window.removeEventListener('scroll', handleScroll)
-      }
-  }, [])
+const favCats = store.cats.filter(cat => cat.favourite)
+
+const navigate = useNavigate()
+window.onload = () => {
+    navigate('/cats')
+}
 
   return (
     <div className="app">
         <Header />
         <Routes>
-            <Route path='/' element={<Cats />} />
-            <Route path='/favourites' element={<FavCats />} />
-            <Route path='*' element={<Navigate to='/' />} />
+            <Route path='/cats' element={<CatsList cats={store.cats} />} />
+            <Route path='cats/favourites' element={<CatsList cats={favCats} />} />
+            <Route path='*' element={<Navigate to='/cats' />} />
         </Routes>
     </div>
   );
